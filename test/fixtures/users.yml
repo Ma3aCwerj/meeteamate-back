@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  password_digest: MyString
+  is_admin: MyString
+  is_banned: MyString
+  exp_ban: MyString
+
+two:
+  email: MyString
+  password_digest: MyString
+  is_admin: MyString
+  is_banned: MyString
+  exp_ban: MyString
