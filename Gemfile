@@ -13,9 +13,16 @@ gem 'puma', '~> 3.11'
 # gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
 gem 'jwt'
+
 gem 'rack-cors', '~> 1.0', '>= 1.0.2'
+
 gem 'simple_command'
+# A simple, comprehensive Ruby gem for parsing user agent strings with the help of 
+# BrowserScope's UA database
+gem 'user_agent_parser'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
