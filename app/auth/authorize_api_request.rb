@@ -1,6 +1,7 @@
 ##
 #
 class AuthorizeApiRequest
+  attr_reader :headers
   prepend SimpleCommand
   
   def initialize(headers = {})
@@ -11,11 +12,10 @@ class AuthorizeApiRequest
     user
   end
   
-  private
-  
-  attr_reader :headers
+  private  
   
   def user
+    return errors.add( :token, 'Invalid token') if BlackList.exists?(token: http_auth_header)
     @user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
     @user || errors.add(:token, 'Invalid token') && nil
   end
