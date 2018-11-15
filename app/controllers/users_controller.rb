@@ -2,15 +2,14 @@
 #
 class UsersController < ApplicationController
 	require 'user_agent_parser'
-	skip_before_action :authenticate_request, only: %i[login register]
+	skip_before_action :authenticate_request, only: %i[login register authenticate]
 	
 	def register
 		@user = User.new(user_params)
 		if @user.save 
 			login
-			# render json: { messge: 'User created'}, status: :created
 		else
-			render json: @user.errors, status: :bad
+			render json: @user.errors, status: :bad_request
 		end
 	end
 
@@ -21,7 +20,7 @@ class UsersController < ApplicationController
   def refresh
   	@token = Token.find_by(token: headers['Authorization'].split(' ').last)
   	return render json: refresh_tokens(current_user, @token) if @token	
-		render json: {message: 'Invalid token'}, status: :user_authentication  		
+		render json: {message: 'Invalid token'}, status: :unauthorized
 	end
 
   private
@@ -29,7 +28,7 @@ class UsersController < ApplicationController
   def authenticate(email, password)
   	user = get_user(email, password)
   	return render json: generate_tokens(user) if user
- 		render json: {message: 'Invalid credentials'}, status: :user_authentication
+ 		render json: {message: 'Invalid credentials'} , status: :unauthorized
   end
 
   def generate_tokens(user)
