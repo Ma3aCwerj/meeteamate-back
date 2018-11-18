@@ -2,14 +2,14 @@
 #
 class UsersController < ApplicationController
 	require 'user_agent_parser'
-	skip_before_action :authenticate_request, only: %i[login register authenticate]
+  skip_before_action :authenticate_request, only: %i[login register authenticate]
 	
 	def register
-		@user = User.new(user_params)
-		if @user.save 
+		user = User.new(user_params)
+		if user.save 
 			login
 		else
-			render json: @user.errors, status: :bad_request
+			render json: user.errors, status: :bad_request
 		end
 	end
 
@@ -18,10 +18,42 @@ class UsersController < ApplicationController
   end
 
   def refresh
-  	@token = Token.find_by(token: headers['Authorization'].split(' ').last)
-  	return render json: refresh_tokens(current_user, @token) if @token	
+  	token = Token.find_by(token: headers['Authorization'].split(' ').last)
+  	return render json: refresh_tokens(current_user, token) if token	
 		render json: {message: 'Invalid token'}, status: :unauthorized
 	end
+
+  def index
+    users = User.users_to_view.page(params[:page]).per(10)
+    if users      
+      render json: users, status: :ok
+    else
+      render json: {message: 'Not found'}, status: :bad_request
+    end
+  end
+
+  def show
+    user = User.users_to_view.find(params[:id])
+    render json: user, status: :ok
+    rescue
+      render json: {message: 'Not found'}, status: :bad_request
+  end
+
+  def update    
+    user = User.find(params[:id])    
+    if user.id == current_user.id
+      user.update(user_params)
+      if user.save
+        show
+      else
+        render json: {message: 'Not save'}, status: :unprocessable_entity
+      end
+    else
+      render json: {message: 'Unprocessable entity'}, status: :unprocessable_entity
+    end  
+    rescue
+      render json: {message: 'Not found'}, status: :bad_request
+  end
 
   private
 
@@ -63,6 +95,6 @@ class UsersController < ApplicationController
   end
 
 	def user_params
-    params.permit( :email, :password, :username)
+    params.permit(:email, :password, :username, :page, :fullname, :about, :city, :birthday)
   end
 end
