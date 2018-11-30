@@ -24,9 +24,10 @@ class UsersController < ApplicationController
 	end
 
   def index
-    users = User.users_to_view.page(params[:page]).per(10)
+    cnt = User.count
+    users = User.users_to_view.page(params[:page]).per(params[:limit])
     if users      
-      render json: users, status: :ok
+      render json: {count: cnt, users:  users}, status: :ok
     else
       render json: {message: 'Not found'}, status: :bad_request
     end
@@ -95,6 +96,6 @@ class UsersController < ApplicationController
   end
 
 	def user_params
-    params.permit(:email, :password, :username, :page, :fullname, :about, :city, :birthday, :picture)
+    params.permit(:email, :password, :username, :page, :fullname, :about, :city, :birthday, :picture, :limit)
   end
 end
