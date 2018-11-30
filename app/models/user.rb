@@ -8,5 +8,8 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :token
+
+  has_many :team
+  
   scope :users_to_view, -> {all.select(:id,:email, :username,:fullname,:picture,:about,:city,:birthday)}
 end
