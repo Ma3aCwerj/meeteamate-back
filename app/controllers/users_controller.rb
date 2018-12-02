@@ -47,7 +47,8 @@ class UsersController < ApplicationController
       if user.save
         show
       else
-        render json: {message: 'Not save'}, status: :unprocessable_entity
+        render json: user.errors, status: :bad_request
+        # render json: {message: 'Not save'}, status: :unprocessable_entity
       end
     else
       render json: {message: 'Unprocessable entity'}, status: :unprocessable_entity
