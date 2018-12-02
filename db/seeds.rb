@@ -6,8 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
-
 users_h = 200.times.map do {
   username: FFaker::Internet.user_name[0..25],
   fullname: FFaker::Internet.user_name[0..25],
