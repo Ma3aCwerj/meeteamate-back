@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'home#index'
+  root 'teams#get_sample'
   post 'auth/register', to: 'users#register'
   post 'auth/login' , to: 'users#login'
   post 'auth/refresh', to: 'users#refresh'
@@ -11,5 +11,9 @@ Rails.application.routes.draw do
   
   put 'users/avatar/:id', to: 'users#update'  
 
-  resources :teams
+  get 'teams', to: 'teams#index'
+  post 'teams', to: 'teams#create'  
+  get 'teams/:id', to: 'teams#show'
+  put 'teams/:id', to: 'teams#update'
+
 end
