@@ -8,5 +8,9 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :token
-  scope :users_to_view, -> {all.select(:id,:email, :username,:fullname,:picture,:about,:city,:birthday)}
+
+  has_many :team
+  
+  scope :users_to_view, -> {all.select(:id,:username,:fullname,:picture,:about,:city,:birthday)}
+  scope :current_user_to_view, -> {all.select(:id,:email,:username,:fullname,:picture,:about,:city,:birthday)}
 end

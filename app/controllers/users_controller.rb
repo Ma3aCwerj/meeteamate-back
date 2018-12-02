@@ -26,18 +26,21 @@ class UsersController < ApplicationController
   def index
     cnt = User.count
     users = User.users_to_view.page(params[:page]).per(params[:limit])
-    if users      
-      render json: {count: cnt, users:  users}, status: :ok
-    else
-      render json: {message: 'Not found'}, status: :bad_request
-    end
+    render json: {count: cnt, users: users}, status: :ok
+    rescue
+      render json: {message: 'Not found'}, status: :not_found
   end
 
   def show
-    user = User.users_to_view.find(params[:id])
+    byebug
+    if params[:id].to_i == current_user.id 
+      user = User.current_user_to_view.find(params[:id])
+    else
+      user = User.users_to_view.find(params[:id]) 
+    end
     render json: user, status: :ok
     rescue
-      render json: {message: 'Not found'}, status: :bad_request
+      render json: {message: 'Not found'}, status: :not_found
   end
 
   def update    
@@ -54,7 +57,7 @@ class UsersController < ApplicationController
       render json: {message: 'Unprocessable entity'}, status: :unprocessable_entity
     end  
     rescue
-      render json: {message: 'Not found'}, status: :bad_request
+      render json: {message: 'Not found'}, status: :not_found
   end
 
   private
