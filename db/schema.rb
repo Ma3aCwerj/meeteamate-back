@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_18_103413) do
+ActiveRecord::Schema.define(version: 2018_11_25_131430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,17 @@ ActiveRecord::Schema.define(version: 2018_11_18_103413) do
     t.index ["about"], name: "index_profiles_on_about"
     t.index ["fullname"], name: "index_profiles_on_fullname"
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "title"
+    t.string "summary"
+    t.text "body"
+    t.string "picture"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_teams_on_user_id"
   end
 
   create_table "tokens", force: :cascade do |t|
@@ -68,4 +79,5 @@ ActiveRecord::Schema.define(version: 2018_11_18_103413) do
   end
 
   add_foreign_key "profiles", "users"
+  add_foreign_key "teams", "users"
 end
