@@ -1,3 +1,5 @@
+##
+#
 class TeamsController < ApplicationController
   skip_before_action :authenticate_request, only: [:get_sample]
   before_action :set_team, only: [:show, :update, :destroy]
@@ -7,7 +9,6 @@ class TeamsController < ApplicationController
     render json: {count: 10, teams: team}, status: :ok
   end
 
-  # GET /teams
   def index
     cnt = Team.count
     teams = Team.all.page(params[:page]).per(params[:limit])
@@ -16,12 +17,10 @@ class TeamsController < ApplicationController
       render json: {message: 'Not found'}, status: :not_found
   end
 
-  # GET /teams/1
   def show
     render json: @team
   end
 
-  # POST /teams
   def create
     @team = Team.new(team_params)
     @team.user = current_user
@@ -32,7 +31,6 @@ class TeamsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /teams/1
   def update
     if current_user.id != @team.user_id
       return  render json: {message: 'Unprocessable entity'}, status: :unprocessable_entity  
@@ -44,18 +42,11 @@ class TeamsController < ApplicationController
     end
   end
 
-  # DELETE /teams/1
-  # def destroy
-  #   @team.destroy
-  # end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_team
       @team = Team.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def team_params
       params.permit(:title, :summary, :body, :picture, :page, :limit)
     end

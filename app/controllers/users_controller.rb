@@ -32,7 +32,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    byebug
     if params[:id].to_i == current_user.id 
       user = User.current_user_to_view.find(params[:id])
     else

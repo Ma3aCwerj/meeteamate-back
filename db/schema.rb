@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_25_131430) do
+ActiveRecord::Schema.define(version: 2018_12_02_180820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(version: 2018_11_25_131430) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_black_lists_on_token"
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.boolean "is_lead", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_members_on_team_id"
+    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -78,6 +88,8 @@ ActiveRecord::Schema.define(version: 2018_11_25_131430) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  add_foreign_key "members", "teams"
+  add_foreign_key "members", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "teams", "users"
 end
